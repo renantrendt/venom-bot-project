@@ -2,7 +2,7 @@
   "name": "venom-bot-project",
   "version": "1.0.0",
   "engines": {
-    "node": "16.x || 18.x"
+    "node": "18.x"
   },
   "scripts": {
     "start": "node index.js",
@@ -14,15 +14,17 @@
   "description": "",
   "dependencies": {
     "venom-bot": "3.1.12",
-    "openai": "^4.0.0",
-    "dotenv": "^16.0.0",
-    "puppeteer": "^19.7.0"
+    "openai": "4.0.0",
+    "dotenv": "16.0.0",
+    "puppeteer": "19.7.0"
   },
   "resolutions": {
     "glob": "^9.0.0",
     "rimraf": "^4.0.0"
   },
   "overrides": {
-    "puppeteer": "^19.7.0"
+    "puppeteer": "19.7.0",
+    "sharp": "0.29.3",
+    "axios": "0.21.4"
   }
 }
