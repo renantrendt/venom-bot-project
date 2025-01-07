@@ -2,7 +2,7 @@
   "name": "venom-bot-project",
   "version": "1.0.0",
   "engines": {
-    "node": ">=16.0.0"
+    "node": "16.x"
   },
   "scripts": {
     "start": "node index.js"
