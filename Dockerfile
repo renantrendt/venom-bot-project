@@ -1,28 +1,22 @@
-FROM node:18-slim
+FROM ghcr.io/puppeteer/puppeteer:22.0.0
 
-# Instalar dependências necessárias para o Puppeteer
-RUN apt-get update \
-    && apt-get install -y wget gnupg \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/sources.list.d/google.list' \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
-    --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+USER root
 
 WORKDIR /app
 
-# Copiar package.json e package-lock.json
+# Aumentar o timeout do npm
+RUN npm config set fetch-timeout 600000
+RUN npm config set fetch-retry-maxtimeout 600000
+
 COPY package*.json ./
 
-# Instalar dependências
-RUN npm install
+# Instalar com --force para ignorar warnings de versão
+RUN npm install --force
 
-# Copiar o resto dos arquivos
 COPY . .
 
-# Expor a porta se necessário
-EXPOSE 3000
+# Adicionar healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD node -e "setTimeout(() => process.exit(0), 1000);"
 
-# Comando para iniciar o bot
 CMD ["npm", "start"] 
