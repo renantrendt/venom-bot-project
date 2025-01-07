@@ -14,7 +14,7 @@ const openai = new OpenAI({
 
 venom
   .create({
-    session: 'test-session',
+    session: `session-${process.env.WHATSAPP_NUMBER}`,
     multidevice: true,
     headless: true,
     debug: true,

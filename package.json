@@ -6,7 +6,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "postinstall": "npm rebuild"
+    "postinstall": "npm rebuild",
+    "clean": "rm -rf tokens"
   },
   "keywords": [],
   "author": "",
