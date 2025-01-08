@@ -14,21 +14,11 @@ const openai = new OpenAI({
 
 venom
   .create({
-    session: `session-${process.env.WHATSAPP_NUMBER}`,
+    session: 'test-session',
     multidevice: true,
     headless: true,
     debug: true,
-    logQR: true,
-    browserArgs: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-accelerated-2d-canvas',
-      '--no-first-run',
-      '--no-zygote',
-      '--single-process', // <- this one doesn't works in Windows
-      '--disable-gpu'
-    ]
+    logQR: true
   })
   .then((client) => {
     console.log('Bot is ready!');
@@ -55,9 +45,22 @@ venom
     
     // Listen to messages
     client.onMessage(async (message) => {
+      // Add debug logs for message properties
+      console.log('\n--- New Message Debug Info ---');
+      console.log('Message type:', typeof message);
+      console.log('Message properties:', {
+        hasBody: !!message.body,
+        bodyLength: message.body ? message.body.length : 0,
+        isGroupMsg: message.isGroupMsg,
+        broadcast: message.broadcast,
+        type: message.type,
+        timestamp: message.timestamp
+      });
+
       // Ignore group messages, broadcast messages, and messages without body
       if (message.isGroupMsg || message.broadcast || !message.body) {
         console.log('Ignoring message:', message.isGroupMsg ? 'group message' : message.broadcast ? 'broadcast message' : 'empty message');
+        console.log('Message body was:', message.body);
         return;
       }
 
@@ -68,7 +71,7 @@ venom
       try {
         // Check if message contains a question mark
         if (message.body.includes('?')) {
-          console.log('Question detected, asking ChatGPT...');
+          console.log('Question detected, message body:', message.body);
           
           // Get response from ChatGPT
           const completion = await openai.chat.completions.create({
@@ -119,9 +122,9 @@ Available commands:
             break;
             
           default:
-            client.sendText(message.from, `You said: ${message.body}`)
-              .then(() => console.log('Sent echo response'))
-              .catch(err => console.error('Error sending echo:', err));
+            // Do nothing for unrecognized commands
+            console.log('Unrecognized command or regular message');
+            break;
         }
       } catch (error) {
         console.error('Error processing message:', error);
