@@ -9,8 +9,6 @@ OPENAI_API_KEY=
 WHATSAPP_NUMBER=
 
 `````
-.
-
 4. npm install openai
 5. npm install venom-bot
 6. node index.js
